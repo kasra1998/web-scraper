@@ -1,0 +1,1239 @@
+{
+  "name": "scraperNavid",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const lines = items[0].json.stdout.trim().split('\\n');\nreturn lines.map(line => ({ json: JSON.parse(line) }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        496
+      ],
+      "id": "2a456452-f2a9-4769-b37e-30872456a78d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "command": "jq -c '.[]' /home/node/scrapers2/mugdostNoDup4.json "
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        192,
+        496
+      ],
+      "id": "4e6a6e56-f724-4623-9606-7a95e2b3cbfc",
+      "name": "arrayOfObjects"
+    },
+    {
+      "parameters": {
+        "command": "=jq -c '.[]' /home/node/scrapers2/arvaNoDup.json "
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        192,
+        304
+      ],
+      "id": "5311c755-5ee3-47b2-b7b9-b008f26bcf55",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lines = items[0].json.stdout.trim().split('\\n');\nreturn lines.map(line => ({ json: JSON.parse(line) }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        688
+      ],
+      "id": "62497a30-41ad-45c8-a19b-e68cea674848",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "command": "/home/node/scrapers2/venv2/bin/python /home/node/scrapers2/mugestanNoDup4.py"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        688
+      ],
+      "id": "be91f85a-fa97-45b2-87f7-cb2b9b24eba5",
+      "name": "mugestan-scrape",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "command": "jq -c '.[]' /home/node/scrapers2/mugestanNoDup4.json "
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        192,
+        688
+      ],
+      "id": "3174266d-90f8-4d1a-bda8-cd534d9353ed",
+      "name": "Execute Command2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lines = items[0].json.stdout.trim().split('\\n');\nreturn lines.map(line => ({ json: JSON.parse(line) }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        304
+      ],
+      "id": "859170ef-0afd-45f8-824d-895827695890",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "command": "/home/node/scrapers2/venv2/bin/python /home/node/scrapers2/shok2.py"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        928
+      ],
+      "id": "633985ea-fde0-46a3-b360-1c16bacd024a",
+      "name": "shokolat",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "command": "=jq -c '.[]' {{$json[\"stdout\"]}}"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        320,
+        928
+      ],
+      "id": "907b0c69-37a5-4ce4-b67a-614fb84da065",
+      "name": "Execute Command4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const stdout = items[0].json.stdout;\n\n// Split lines\nconst lines = stdout.split(\"\\n\");\n\n// Filter only _1 and _2 files\nconst filtered = lines.filter(l =>\n  l.includes(\"_1.json\") || l.includes(\"_2.json\")\n);\n\n// Return each as a separate item\nreturn filtered.map(path => {\n  return {\n    json: {\n      exitCode: 0,\n      stderr: \"\",\n      stdout: path\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        928
+      ],
+      "id": "f8d254b8-2248-4d27-b342-3a28f442914e",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "command": "=jq -c '.[]' {{$json[\"stdout\"]}}"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        496,
+        1088
+      ],
+      "id": "fc54dd58-5c55-42bb-9272-cf957b584bf0",
+      "name": "Execute Command5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1878eb6-34b1-481a-9df1-f7af156106c2",
+              "leftValue": "={{ $json.stdout }}",
+              "rightValue": "=/home/node/scrapers2/shokolat_products_1.json",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        144,
+        928
+      ],
+      "id": "3aaf3823-987c-4c72-b97e-fb38b33e9539",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "083d3f90-9501-40b1-97db-2b8e1754e3c1",
+              "leftValue": "={{ $json.stdout }}",
+              "rightValue": "/home/node/scrapers2/shokolat_products_2.json",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        320,
+        1088
+      ],
+      "id": "9174831a-0e4a-494e-b7b9-969dd395113d",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lines = items[0].json.stdout.trim().split('\\n');\nreturn lines.map(line => ({ json: JSON.parse(line) }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        928
+      ],
+      "id": "dd3d475a-7425-4b5d-9b4a-20c4ea31f351",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "command": "/home/node/scrapers2/venv2/bin/python /home/node/scrapers2/mugdostNoDup4.py"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        496
+      ],
+      "id": "c9664284-f3bc-4ee4-92c0-e74f89927dae",
+      "name": "mugdost",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "command": "/home/node/scrapers2/venv2/bin/python /home/node/scrapers2/arvaNoDup3.py"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        304
+      ],
+      "id": "f2a92031-9b06-4228-a161-7f3261112ea2",
+      "name": "arva",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 913592566,
+          "mode": "list",
+          "cachedResultName": "arvaUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=913592566"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "subcategory",
+              "displayName": "subcategory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "stock",
+              "displayName": "stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "volume",
+              "displayName": "volume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "productUrl",
+              "displayName": "productUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pictureUrl",
+              "displayName": "pictureUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        304
+      ],
+      "id": "6abce690-6867-47b4-b989-5cd5658bbc8b",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 357496280,
+          "mode": "list",
+          "cachedResultName": "mugestanUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=357496280"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "subcategory",
+              "displayName": "subcategory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "inOrOutOfStock",
+              "displayName": "inOrOutOfStock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "volume",
+              "displayName": "volume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "productUrl",
+              "displayName": "productUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pictureUrl",
+              "displayName": "pictureUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        688
+      ],
+      "id": "8a84de60-006b-4377-993d-f7437cc8949b",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 735058020,
+          "mode": "list",
+          "cachedResultName": "mugdostUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=735058020"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "subcategory",
+              "displayName": "subcategory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "stock",
+              "displayName": "stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "volume",
+              "displayName": "volume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "productUrl",
+              "displayName": "productUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pictureUrl",
+              "displayName": "pictureUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        496
+      ],
+      "id": "727bb988-9a5d-47e9-9e9b-04274fbd7cba",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        144,
+        1088
+      ],
+      "id": "ac88217c-12d6-4b4a-971c-664970da4369",
+      "name": "Wait",
+      "webhookId": "de6ac24b-b19e-4f3d-91ce-2202a9d8f472"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lines = items[0].json.stdout.trim().split('\\n');\nreturn lines.map(line => ({ json: JSON.parse(line) }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        1088
+      ],
+      "id": "745a9725-0a0f-4896-a45d-05906d75c99a",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 921028778,
+          "mode": "list",
+          "cachedResultName": "shokolatUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=921028778"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        928
+      ],
+      "id": "3a9acb7a-f4d7-43f2-807a-0cbfd87d6993",
+      "name": "Append row in sheet3",
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 921028778,
+          "mode": "list",
+          "cachedResultName": "shokolatUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=921028778"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        880,
+        1088
+      ],
+      "id": "58f9e375-3b54-4f1f-9d97-3f0c217732d9",
+      "name": "Append row in sheet4",
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://script.google.com/macros/s/AKfycby5MwX0beHtnmUXI9KcpuT2XX2Mle7Ll0ZlH3W1BMOYO7A9l99pqir8BigxRiwu-j5T/exec",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1104,
+        1088
+      ],
+      "id": "5e550856-7322-467a-b795-f433336c752a",
+      "name": "HTTP Request",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 913592566,
+          "mode": "list",
+          "cachedResultName": "arvaUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=913592566"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -352,
+        256
+      ],
+      "id": "54121d3d-ac7e-4936-9ace-4139a29e6493",
+      "name": "clearArva",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 735058020,
+          "mode": "list",
+          "cachedResultName": "mugdostUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=735058020"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -352,
+        192
+      ],
+      "id": "27e7cc5e-e4c0-4810-981d-b204adcb630f",
+      "name": "Clear mugdost",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 357496280,
+          "mode": "list",
+          "cachedResultName": "mugestanUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=357496280"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -352,
+        128
+      ],
+      "id": "7590f7ab-f7ce-48df-b5e0-11bb5752c0db",
+      "name": "Clear mugestan",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM",
+          "mode": "list",
+          "cachedResultName": "Price Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 921028778,
+          "mode": "list",
+          "cachedResultName": "shokolatUpdated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13154CXhc8P-CcpeGykMeVY3clUIcCAAXcMitjIAwvRM/edit#gid=921028778"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -352,
+        64
+      ],
+      "id": "8e48f631-cac4-4386-a130-520d16a0924a",
+      "name": "Clear shokolat",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "m1yKsd2FqypFq3S9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        512
+      ],
+      "id": "6ca7e600-3fe6-481b-947f-4ddbb611073b",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "arrayOfObjects": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mugestan-scrape": {
+      "main": [
+        [
+          {
+            "node": "Execute Command2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "shokolat": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Execute Command4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Execute Command5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mugdost": {
+      "main": [
+        [
+          {
+            "node": "arrayOfObjects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "arva": {
+      "main": [
+        [
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "mugdost",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "shokolat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "mugestan-scrape",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "arva",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "clearArva",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Clear mugdost",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Clear mugestan",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Clear shokolat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d0f9c983-9c68-48fa-8c9e-4530d749a983",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "db7c95cbbdfc308b7561b4c19c4aa84d0c5ad7b722c3a6017f1972a850d4b750"
+  },
+  "id": "bsE0p4rEtuYw8IGU",
+  "tags": []
+}
